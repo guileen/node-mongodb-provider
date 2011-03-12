@@ -9,7 +9,6 @@ class MongoProvider
       fn undefined, @_collection
     else
       @db.collection @collectionName, (err, collection) =>
-        console.log "collection#{collection}"
         if err
           fn err
         else
