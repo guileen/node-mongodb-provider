@@ -1,5 +1,5 @@
 (function() {
-  var ArticleProvider, AuthorProvider, LINE_SIZE, MongoProvider, UserProvider, articleProvider, authorProvider, db, host, mongo, port, sys, userProvider;
+  var ArticleProvider, AuthorProvider, LINE_SIZE, MongoProvider, UserProvider, articleProvider, authorProvider, authors, db, host, mongo, port, sys, userProvider, users;
   var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
     for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
     function ctor() { this.constructor = child; }
@@ -15,6 +15,8 @@
   host = process.env['MONGO_NODE_DRIVER_HOST'] || 'localhost';
   port = process.env['MONGO_NODE_DRIVER_PORT'] || mongo.Connection.DEFAULT_PORT;
   LINE_SIZE = 120;
+  authors = {};
+  users = {};
   AuthorProvider = (function() {
     __extends(AuthorProvider, MongoProvider);
     function AuthorProvider(db) {
@@ -32,10 +34,14 @@
           'age': 123
         }
       ], function(err, docs) {
-        return docs.forEach(function(doc) {
-          sys.puts(sys.inspect(doc));
-          return authors[doc.name] = doc;
-        });
+        if (err) {
+          return sys.puts(err.stack);
+        } else {
+          return docs.forEach(function(doc) {
+            sys.puts(sys.inspect(doc));
+            return authors[doc.name] = doc;
+          });
+        }
       });
     };
     return AuthorProvider;
@@ -54,22 +60,19 @@
     }
     return ArticleProvider;
   })();
+  sys.puts('Connecting to ' + host + ':' + port);
+  db = new mongo.Db('node-mongo-blog', new mongo.Server(host, port, {}), {});
   authorProvider = new AuthorProvider(db);
   userProvider = new UserProvider(db);
   articleProvider = new ArticleProvider(db);
-  sys.puts('Connecting to ' + host + ':' + port);
-  db = new mongo.Db('node-mongo-blog', new mongo.Server(host, port, {}), {});
   db.open(function(err, db) {
     return db.dropDatabase(function(err, result) {
       sys.puts('===================================================================================');
       sys.puts('>> Adding Authors');
       sys.puts('===================================================================================');
-      sys.puts(sys.inspect(AuthorProvider.prototype));
       authorProvider.doInsert();
       return authorProvider.createIndex(['meta', ['_id', 1], ['name', 1], ['age', 1]], function(err, indexName) {
-        var authors;
         sys.puts('===================================================================================');
-        authors = {};
         sys.puts('===================================================================================');
         sys.puts('>> Authors ordered by age ascending');
         sys.puts('===================================================================================');
@@ -77,14 +80,12 @@
           'sort': [['age', 1]]
         }, function(err, cursor) {
           return cursor.each(function(err, author) {
-            var users;
             if (author !== null) {
               return sys.puts('[' + author.name + ']:[' + author.email + ']:[' + author.age + ']');
             } else {
               sys.puts('===================================================================================');
               sys.puts('>> Adding users');
               sys.puts('===================================================================================');
-              users = {};
               userProvider.insert([
                 {
                   'login': 'jdoe',
@@ -96,10 +97,14 @@
                   'email': 'lucy@smith.com'
                 }
               ], function(err, docs) {
-                return docs.forEach(function(doc) {
-                  sys.puts(sys.inspect(doc));
-                  return users[doc.login] = doc;
-                });
+                if (err) {
+                  return sys.puts(sys.inspect(err));
+                } else {
+                  return docs.forEach(function(doc) {
+                    sys.puts(sys.inspect(doc));
+                    return users[doc.login] = doc;
+                  });
+                }
               });
               sys.puts('===================================================================================');
               sys.puts('>> Users ordered by login ascending');
