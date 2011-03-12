@@ -1,119 +1,161 @@
-GLOBAL.DEBUG = true;
-
-sys = require('sys');
-
-var mongo = require('mongodb');
-var MongoProvider = require('../lib/provider');
-
-var host = process.env['MONGO_NODE_DRIVER_HOST'] != null ? process.env['MONGO_NODE_DRIVER_HOST'] : 'localhost';
-var port = process.env['MONGO_NODE_DRIVER_PORT'] != null ? process.env['MONGO_NODE_DRIVER_PORT'] : mongo.Connection.DEFAULT_PORT;
-
-var LINE_SIZE = 120;
-
-var AuthorProvider = function(db) {
-  this.db = db;
-  this.collectionName = 'authors';
-};
-
-AuthorProvider.prototype = {
-
-  doInsert: function(callback) {
-
-    // Insert authors
-    this.insert([{'name': 'William Shakespeare', 'email': 'william@shakespeare.com', 'age': 587},
-      {'name': 'Jorge Luis Borges', 'email': 'jorge@borges.com', 'age': 123}], function(err, docs) {
-        docs.forEach(function(doc) {
+(function() {
+  var ArticleProvider, AuthorProvider, LINE_SIZE, MongoProvider, UserProvider, articleProvider, authorProvider, db, host, mongo, port, sys, userProvider;
+  var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
+    for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
+    function ctor() { this.constructor = child; }
+    ctor.prototype = parent.prototype;
+    child.prototype = new ctor;
+    child.__super__ = parent.prototype;
+    return child;
+  };
+  GLOBAL.DEBUG = true;
+  sys = require('sys');
+  mongo = require('mongodb');
+  MongoProvider = require('../lib/provider').MongoProvider;
+  host = process.env['MONGO_NODE_DRIVER_HOST'] || 'localhost';
+  port = process.env['MONGO_NODE_DRIVER_PORT'] || mongo.Connection.DEFAULT_PORT;
+  LINE_SIZE = 120;
+  AuthorProvider = (function() {
+    __extends(AuthorProvider, MongoProvider);
+    function AuthorProvider(db) {
+      AuthorProvider.__super__.constructor.call(this, db, 'authors');
+    }
+    AuthorProvider.prototype.doInsert = function(callback) {
+      return this.insert([
+        {
+          'name': 'William Shakespeare',
+          'email': 'william@shakespeare.com',
+          'age': 587
+        }, {
+          'name': 'Jorge Luis Borges',
+          'email': 'jorge@borges.com',
+          'age': 123
+        }
+      ], function(err, docs) {
+        return docs.forEach(function(doc) {
           sys.puts(sys.inspect(doc));
-          authors[doc.name] = doc;
+          return authors[doc.name] = doc;
         });
-    });
-
-  }
-
-
-
-};
-
-Object.extend(AuthorProvider, MongoProvider);
-
-sys.puts('Connecting to ' + host + ':' + port);
-var db = new mongo.Db('node-mongo-blog', new mongo.Server(host, port, {}), {});
-db.open(function(err, db) {
-  db.dropDatabase(function(err, result) {
-    sys.puts('===================================================================================');
-    sys.puts('>> Adding Authors');
-    collection.createIndex(['meta', ['_id', 1], ['name', 1], ['age', 1]], function(err, indexName) {
+      });
+    };
+    return AuthorProvider;
+  })();
+  UserProvider = (function() {
+    __extends(UserProvider, MongoProvider);
+    function UserProvider(db) {
+      UserProvider.__super__.constructor.call(this, db, "users");
+    }
+    return UserProvider;
+  })();
+  ArticleProvider = (function() {
+    __extends(ArticleProvider, MongoProvider);
+    function ArticleProvider(db) {
+      ArticleProvider.__super__.constructor.call(this, db, "article");
+    }
+    return ArticleProvider;
+  })();
+  authorProvider = new AuthorProvider(db);
+  userProvider = new UserProvider(db);
+  articleProvider = new ArticleProvider(db);
+  sys.puts('Connecting to ' + host + ':' + port);
+  db = new mongo.Db('node-mongo-blog', new mongo.Server(host, port, {}), {});
+  db.open(function(err, db) {
+    return db.dropDatabase(function(err, result) {
       sys.puts('===================================================================================');
-      var authors = {};
+      sys.puts('>> Adding Authors');
       sys.puts('===================================================================================');
-      sys.puts('>> Authors ordered by age ascending');
-      sys.puts('===================================================================================');
-      collection.find({}, {'sort': [['age', 1]]}, function(err, cursor) {
-        cursor.each(function(err, author) {
-          if (author != null) {
-            sys.puts('[' + author.name + ']:[' + author.email + ']:[' + author.age + ']');
-          } else {
-            sys.puts('===================================================================================');
-            sys.puts('>> Adding users');
-            sys.puts('===================================================================================');
-            db.collection('users', function(err, userCollection) {
-              var users = {};
-
-              userCollection.insert([{'login': 'jdoe', 'name': 'John Doe', 'email': 'john@doe.com'},
-                {'login': 'lsmith', 'name': 'Lucy Smith', 'email': 'lucy@smith.com'}], function(err, docs) {
-                  docs.forEach(function(doc) {
-                    sys.puts(sys.inspect(doc));
-                    users[doc.login] = doc;
-                  });
+      sys.puts(sys.inspect(AuthorProvider.prototype));
+      authorProvider.doInsert();
+      return authorProvider.createIndex(['meta', ['_id', 1], ['name', 1], ['age', 1]], function(err, indexName) {
+        var authors;
+        sys.puts('===================================================================================');
+        authors = {};
+        sys.puts('===================================================================================');
+        sys.puts('>> Authors ordered by age ascending');
+        sys.puts('===================================================================================');
+        return authorProvider.find({}, {
+          'sort': [['age', 1]]
+        }, function(err, cursor) {
+          return cursor.each(function(err, author) {
+            var users;
+            if (author !== null) {
+              return sys.puts('[' + author.name + ']:[' + author.email + ']:[' + author.age + ']');
+            } else {
+              sys.puts('===================================================================================');
+              sys.puts('>> Adding users');
+              sys.puts('===================================================================================');
+              users = {};
+              userProvider.insert([
+                {
+                  'login': 'jdoe',
+                  'name': 'John Doe',
+                  'email': 'john@doe.com'
+                }, {
+                  'login': 'lsmith',
+                  'name': 'Lucy Smith',
+                  'email': 'lucy@smith.com'
+                }
+              ], function(err, docs) {
+                return docs.forEach(function(doc) {
+                  sys.puts(sys.inspect(doc));
+                  return users[doc.login] = doc;
+                });
               });
-
               sys.puts('===================================================================================');
               sys.puts('>> Users ordered by login ascending');
               sys.puts('===================================================================================');
-              userCollection.find({}, {'sort': [['login', 1]]}, function(err, cursor) {
-                cursor.each(function(err, user) {
-                  if (user != null) {
-                    sys.puts('[' + user.login + ']:[' + user.name + ']:[' + user.email + ']');
+              return userProvider.find({}, {
+                'sort': [['login', 1]]
+              }, function(err, cursor) {
+                return cursor.each(function(err, user) {
+                  if (user !== null) {
+                    return sys.puts('[' + user.login + ']:[' + user.name + ']:[' + user.email + ']');
                   } else {
                     sys.puts('===================================================================================');
                     sys.puts('>> Adding articles');
                     sys.puts('===================================================================================');
-                    db.collection('articles', function(err, articlesCollection) {
-                      articlesCollection.insert([
-                        { 'title': 'Caminando por Buenos Aires',
-                          'body': 'Las callecitas de Buenos Aires tienen ese no se que...',
-                          'author_id': authors['Jorge Luis Borges']._id},
-                        { 'title': 'I must have seen thy face before',
-                          'body': 'Thine eyes call me in a new way',
-                          'author_id': authors['William Shakespeare']._id,
-                          'comments': [{'user_id': users['jdoe']._id, 'body': 'great article!'}]
-                        }
-                      ], function(err, docs) {
-                        docs.forEach(function(doc) {
-                          sys.puts(sys.inspect(doc));
-                        });
-                      });
-
-                      sys.puts('===================================================================================');
-                      sys.puts('>> Articles ordered by title ascending');
-                      sys.puts('===================================================================================');
-                      articlesCollection.find({}, {'sort': [['title', 1]]}, function(err, cursor) {
-                        cursor.each(function(err, article) {
-                          if (article != null) {
-                            sys.puts('[' + article.title + ']:[' + article.body + ']:[' + article.author_id.toHexString() + ']');
-                            sys.puts('>> Closing connection');
-                            db.close();
+                    articleProvider.insert([
+                      {
+                        'title': 'Caminando por Buenos Aires',
+                        'body': 'Las callecitas de Buenos Aires tienen ese no se que...',
+                        'author_id': authors['Jorge Luis Borges']._id
+                      }, {
+                        'title': 'I must have seen thy face before',
+                        'body': 'Thine eyes call me in a new way',
+                        'author_id': authors['William Shakespeare']._id,
+                        'comments': [
+                          {
+                            'user_id': users['jdoe']._id,
+                            'body': 'great article!'
                           }
-                        });
+                        ]
+                      }
+                    ], function(err, docs) {
+                      return docs.forEach(function(doc) {
+                        return sys.puts(sys.inspect(doc));
+                      });
+                    });
+                    sys.puts('===================================================================================');
+                    sys.puts('>> Articles ordered by title ascending');
+                    sys.puts('===================================================================================');
+                    return articleProvider.find({}, {
+                      'sort': [['title', 1]]
+                    }, function(err, cursor) {
+                      return cursor.each(function(err, article) {
+                        if (article !== null) {
+                          sys.puts('[' + article.title + ']:[' + article.body + ']:[' + article.author_id.toHexString() + ']');
+                          sys.puts('>> Closing connection');
+                          return db.close();
+                        }
                       });
                     });
                   }
                 });
               });
-            });
-          }
+            }
+          });
         });
       });
     });
   });
-});
+}).call(this);
