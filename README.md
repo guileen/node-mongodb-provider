@@ -6,33 +6,36 @@ Base on [node-mongo-native](https://github.com/christkv/node-mongodb-native)
 
 ## MongoProvider
 
- Bridge all the method from Collection  
- * insert
- * checkCollectionName
- * remove
- * rename
- * insertAll
- * save
- * update
- * distinct
- * count
- * drop
- * findAndModify
- * find
- * normalizeHintField
- * findOne
- * createIndex
- * ensureIndex
- * indexInformation
- * dropIndex
- * dropIndexes
- * mapReduce
- * group
- * options
- additional method  
- * collection(callback(err,collection))
- * findItems(..., callback(err, itemsArray))
- * findEach(..., callback(err, item))
+### Bridge all the method from Collection  
+
+>     insert
+>     checkCollectionName
+>     remove
+>     rename
+>     insertAll
+>     save
+>     update
+>     distinct
+>     count
+>     drop
+>     findAndModify
+>     find
+>     normalizeHintField
+>     findOne
+>     createIndex
+>     ensureIndex
+>     indexInformation
+>     dropIndex
+>     dropIndexes
+>     mapReduce
+>     group
+>     options
+
+### additional method  
+
+>     collection(callback(err,collection))
+>     findItems(..., callback(err, itemsArray))
+>     findEach(..., callback(err, item))
 
 ### example
 
