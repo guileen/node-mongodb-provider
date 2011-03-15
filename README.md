@@ -8,28 +8,28 @@ Base on [node-mongo-native](https://github.com/christkv/node-mongodb-native)
 
 ### Bridge all the method from Collection  
 
->     insert
 >     checkCollectionName
->     remove
->     rename
->     insertAll
->     save
->     update
->     distinct
 >     count
->     drop
->     findAndModify
->     find
->     normalizeHintField
->     findOne
 >     createIndex
->     ensureIndex
->     indexInformation
+>     distinct
+>     drop
 >     dropIndex
 >     dropIndexes
->     mapReduce
+>     ensureIndex
+>     find
+>     findAndModify
+>     findOne
 >     group
+>     indexInformation
+>     insert
+>     insertAll
+>     mapReduce
+>     normalizeHintField
 >     options
+>     remove
+>     rename
+>     save
+>     update
 
 ### additional method  
 
@@ -53,6 +53,11 @@ Base on [node-mongo-native](https://github.com/christkv/node-mongodb-native)
 >             return sys.puts("Doc from Each " + sys.inspect(doc));
 >           }
 >         });
+>       });
+>       user.findEach(function(err, doc) {
+>         if (doc !== null) {
+>           return sys.puts('Doc from findEach ' + sys.inspect(doc));
+>         }
 >       });
 >       users.findItems({}, { 'skip': 1, 'limit': 1, 'sort': 'a' }, function(err, docs) {
 >         return sys.puts("Returned #" + docs.length + " documents");
