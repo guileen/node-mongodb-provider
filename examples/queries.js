@@ -9,6 +9,9 @@
   sys.puts("Connecting to " + host + ":" + port);
   db = new mongo.Db('node-mongo-examples', new mongo.Server(host, port, {}), {});
   db.open(function(err, db) {
+    if (err) {
+      sys.puts(err.stack);
+    }
     return db.dropDatabase(function() {
       var tests;
       tests = new MongoProvider(db, "test");
@@ -32,6 +35,12 @@
                 return sys.puts("Doc from Each " + sys.inspect(doc));
               }
             });
+          });
+          sys.puts('Printing docs from Cursor Each');
+          tests.findEach(function(err, doc) {
+            if (doc !== null) {
+              return sys.puts("Doc from findEach " + sys.inspect(doc));
+            }
           });
           tests.find(function(err, cursor) {
             return cursor.toArray(function(err, docs) {
@@ -105,14 +114,14 @@
             'limit': 1,
             'sort': 'a'
           }, function(err, docs) {
-            return sys.puts("Returned #" + docs.length + " documents");
+            return sys.puts("findItems returned #" + docs.length + " documents");
           });
           tests.findItems({
             'a': {
               '$gt': 1
             }
           }, function(err, docs) {
-            return sys.puts("Returned #" + docs.length + " documents");
+            return sys.puts("findItems returned #" + docs.length + " documents");
           });
           tests.findItems({
             'a': {
@@ -120,19 +129,19 @@
               '$lte': 3
             }
           }, function(err, docs) {
-            return sys.puts("Returned #" + docs.length + " documents");
+            return sys.puts("findItems returned #" + docs.length + " documents");
           });
           tests.findItems({
             'a': {
               '$in': [1, 2]
             }
           }, function(err, docs) {
-            return sys.puts("Returned #" + docs.length + " documents");
+            return sys.puts("findItems returned #" + docs.length + " documents");
           });
           tests.findItems({
             'a': /[1|2]/
           }, function(err, docs) {
-            return sys.puts("Returned #" + docs.length + " documents");
+            return sys.puts("findItems returned #" + docs.length + " documents");
           });
           return tests.createIndex('a', function(err, indexName) {
             tests.hint = 'a';

@@ -20,8 +20,14 @@ class MongoProvider
       if err
         fn err
       else
-        cursor.toArray (err, items) ->
-          if err then fn err else fn err, items
+        cursor.toArray fn
+
+  findEach: (args..., fn) ->
+    @find args..., (err, cursor) ->
+      if err
+        fn err
+      else
+        cursor.each fn
 
 ###
   bind these methods from Collection.prototype to Provider

@@ -12,6 +12,8 @@ port = process.env['MONGO_NODE_DRIVER_PORT'] or mongo.Connection.DEFAULT_PORT
 sys.puts("Connecting to " + host + ":" + port)
 db = new mongo.Db('node-mongo-examples', new mongo.Server(host, port, {}), {})
 db.open (err, db) ->
+  if err
+    sys.puts(err.stack)
   db.dropDatabase () ->
     tests = new MongoProvider db, "test"
     # Remove all records in collection if any
@@ -30,6 +32,10 @@ db.open (err, db) ->
           sys.puts("Printing docs from Cursor Each")
           cursor.each (err, doc) ->
             if(doc != null) then sys.puts("Doc from Each " + sys.inspect(doc))
+
+        sys.puts('Printing docs from Cursor Each')
+        tests.findEach (err, doc) ->
+          if(doc != null) then sys.puts("Doc from findEach " + sys.inspect(doc))
 
         # Cursor has an to array method that reads in all the records to memory
         tests.find (err, cursor) ->
@@ -81,22 +87,22 @@ db.open (err, db) ->
         # Find records sort by 'a', skip 1, limit 2 records
         # Sort can be a single name, array, associate array or ordered hash
         tests.findItems {}, {'skip':1, 'limit':1, 'sort':'a'}, (err, docs) ->
-          sys.puts("Returned #" + docs.length + " documents")
+          sys.puts("findItems returned #" + docs.length + " documents")
 
         # Find all records with 'a' > 1, you can also use $lt, $gte or $lte
         tests.findItems {'a':{'$gt':1}}, (err, docs) ->
-          sys.puts("Returned #" + docs.length + " documents")
+          sys.puts("findItems returned #" + docs.length + " documents")
 
         tests.findItems {'a':{'$gt':1, '$lte':3}}, (err, docs) ->
-          sys.puts("Returned #" + docs.length + " documents")
+          sys.puts("findItems returned #" + docs.length + " documents")
 
         # Find all records with 'a' in a set of values
         tests.findItems {'a':{'$in':[1,2]}}, (err, docs) ->
-          sys.puts("Returned #" + docs.length + " documents")
+          sys.puts("findItems returned #" + docs.length + " documents")
 
         # Find by regexp
         tests.findItems {'a':/[1|2]/}, (err, docs) ->
-          sys.puts("Returned #" + docs.length + " documents")
+          sys.puts("findItems returned #" + docs.length + " documents")
 
 
         # Use a hint with a query, hint's can also be store in the collection
