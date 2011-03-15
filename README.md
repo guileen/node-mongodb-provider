@@ -6,7 +6,7 @@ Base on [node-mongo-native](https://github.com/christkv/node-mongodb-native)
 
 ## MongoProvider
 
-* Bridge all the method from Collection
+ Bridge all the method from Collection  
  * insert
  * checkCollectionName
  * remove
@@ -29,7 +29,7 @@ Base on [node-mongo-native](https://github.com/christkv/node-mongodb-native)
  * mapReduce
  * group
  * options
-* additional method
+ additional method  
  * collection(callback(err,collection))
  * findItems(..., callback(err, itemsArray))
  * findEach(..., callback(err, item))
