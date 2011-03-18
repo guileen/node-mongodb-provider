@@ -2,7 +2,9 @@
 
 Base on [node-mongodb-native](https://github.com/christkv/node-mongodb-native)
 
-# API
+## Installation
+
+>     npm install mongodb-provider
 
 ## MongoProvider
 
@@ -39,7 +41,7 @@ Base on [node-mongodb-native](https://github.com/christkv/node-mongodb-native)
 
 ### example
 
->     MongoProvider = require("mongo-provider").MongoProvider;
+>     MongoProvider = require("mongodb-provider").MongoProvider;
 >     var db = new Db("provider-example", new Server(host, port), {});
 >     var users = new MongoProvider(db, "users");
 >     users.insert([ { 'a': 1 }, { 'a': 2 }, { 'b': 3 } ], function(docs) {
