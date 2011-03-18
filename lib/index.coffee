@@ -1,0 +1,1 @@
+{MongoProvider} = require './provider'
