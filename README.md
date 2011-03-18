@@ -9,7 +9,7 @@ Base on [node-mongodb-native](https://github.com/christkv/node-mongodb-native)
 ## Why MongoProvider
 
 before 
->    db.collection('users', function(error, collection){ 
+>     db.collection('users', function(error, collection){ 
 >      if(error)
 >        log(error) 
 >      else 
@@ -26,13 +26,13 @@ before
 >         })
 >      })
 now
->    var userProvider = new MongoProvider(db, 'users')
->    userProvider.findItems(function(error,items){ 
->      if(error)
->        log(error)
->      eles
->        handle(items)
->    })
+>     var userProvider = new MongoProvider(db, 'users')
+>     userProvider.findItems(function(error,items){ 
+>       if(error)
+>         log(error)
+>       eles
+>         handle(items)
+>     })
 
 ## MongoProvider
 
