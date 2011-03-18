@@ -6,6 +6,34 @@ Base on [node-mongodb-native](https://github.com/christkv/node-mongodb-native)
 
 >     npm install mongodb-provider
 
+## Why MongoProvider
+
+before 
+>    db.collection('users', function(error, collection){ 
+>      if(error)
+>        log(error) 
+>      else 
+>        collection.find( function(error, cursor){
+>          if(error)
+>            log(error)
+>          else
+>            cursor.toArray(function(error, items){
+>              if(error)
+>                log(error)
+>              else 
+>                handle(items)
+>            })
+>         })
+>      })
+now
+>    var userProvider = new MongoProvider(db, 'users')
+>    userProvider.findItems(function(error,items){ 
+>      if(error)
+>        log(error)
+>      eles
+>        handle(items)
+>    })
+
 ## MongoProvider
 
 ### Bridge all the methods from Collection  
