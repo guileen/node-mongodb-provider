@@ -1,12 +1,12 @@
 # MongoProvider
 
-Base on [node-mongo-native](https://github.com/christkv/node-mongodb-native)
+Base on [node-mongodb-native](https://github.com/christkv/node-mongodb-native)
 
 # API
 
 ## MongoProvider
 
-### Bridge all the method from Collection  
+### Bridge all the methods from Collection  
 
 >     checkCollectionName
 >     count
@@ -31,7 +31,7 @@ Base on [node-mongo-native](https://github.com/christkv/node-mongodb-native)
 >     save
 >     update
 
-### additional method  
+### additional methods  
 
 >     collection(callback(err,collection))
 >     findItems(..., callback(err, itemsArray))
@@ -54,7 +54,7 @@ Base on [node-mongo-native](https://github.com/christkv/node-mongodb-native)
 >           }
 >         });
 >       });
->       user.findEach(function(err, doc) {
+>       users.findEach(function(err, doc) {
 >         if (doc !== null) {
 >           return sys.puts('Doc from findEach ' + sys.inspect(doc));
 >         }

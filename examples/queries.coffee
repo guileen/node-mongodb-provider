@@ -20,6 +20,7 @@ db.open (err, db) ->
     tests.remove (err, collection) ->
       # Insert three records
       tests.insert [{'a':1}, {'a':2}, {'b':3}], (docs) ->
+        tests.ensureIndex {a:1}, (err, rep) ->
         # Count the number of records
         tests.count (err, count) ->
           sys.puts("There are " + count + " records.")

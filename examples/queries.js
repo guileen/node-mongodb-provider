@@ -25,6 +25,9 @@
             'b': 3
           }
         ], function(docs) {
+          tests.ensureIndex({
+            a: 1
+          }, function(err, rep) {});
           tests.count(function(err, count) {
             return sys.puts("There are " + count + " records.");
           });

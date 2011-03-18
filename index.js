@@ -1,1 +1,1 @@
-module.exports = require('./lib/provider');
+module.exports = require('./lib');
