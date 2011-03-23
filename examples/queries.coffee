@@ -11,16 +11,27 @@ port = process.env['MONGO_NODE_DRIVER_PORT'] or mongo.Connection.DEFAULT_PORT
 
 sys.puts("Connecting to " + host + ":" + port)
 db = new mongo.Db('node-mongo-examples', new mongo.Server(host, port, {}), {})
+tests = new MongoProvider db, "test"
 db.open (err, db) ->
   if err
     sys.puts(err.stack)
   db.dropDatabase () ->
-    tests = new MongoProvider db, "test"
+    console.log 'dropDatabase ...'
     # Remove all records in collection if any
     tests.remove (err, collection) ->
       # Insert three records
-      tests.insert [{'a':1}, {'a':2}, {'b':3}], (docs) ->
-        tests.ensureIndex {a:1}, (err, rep) ->
+      console.log 'do insert ...'
+      tests.insert [{'a':1}, {'a':2}, {'b':3}], (err, docs) ->
+
+        console.log 'done insert ...'
+        console.log sys.inspect docs
+        console.log sys.inspect docs[0]._id.toHexString()
+
+        tests.findById docs[0]._id.toHexString(), (err, doc) ->
+          console.log 'result of findById is '
+          console.dir doc
+
+        tests.ensureIndex [['a',1]], (err, rep) ->
         # Count the number of records
         tests.count (err, count) ->
           sys.puts("There are " + count + " records.")

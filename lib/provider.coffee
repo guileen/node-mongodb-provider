@@ -1,4 +1,5 @@
-{Collection} = require "mongodb"
+mongodb = require 'mongodb'
+Collection = mongodb.Collection
 
 class MongoProvider
   constructor: (@db, @collectionName) ->
@@ -28,6 +29,9 @@ class MongoProvider
         fn err
       else
         cursor.each fn
+
+  findById: (id, fn) ->
+    @findOne {_id: @db.bson_serializer.ObjectID.createFromHexString(id)}, fn
 
 ###
   bind these methods from Collection.prototype to Provider

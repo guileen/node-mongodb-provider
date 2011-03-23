@@ -1,5 +1,5 @@
 (function() {
-  var MongoProvider, db, host, mongo, port, sys;
+  var MongoProvider, db, host, mongo, port, sys, tests;
   GLOBAL.DEBUG = true;
   sys = require("sys");
   mongo = require('mongodb');
@@ -8,14 +8,15 @@
   port = process.env['MONGO_NODE_DRIVER_PORT'] || mongo.Connection.DEFAULT_PORT;
   sys.puts("Connecting to " + host + ":" + port);
   db = new mongo.Db('node-mongo-examples', new mongo.Server(host, port, {}), {});
+  tests = new MongoProvider(db, "test");
   db.open(function(err, db) {
     if (err) {
       sys.puts(err.stack);
     }
     return db.dropDatabase(function() {
-      var tests;
-      tests = new MongoProvider(db, "test");
+      console.log('dropDatabase ...');
       return tests.remove(function(err, collection) {
+        console.log('do insert ...');
         return tests.insert([
           {
             'a': 1
@@ -24,10 +25,15 @@
           }, {
             'b': 3
           }
-        ], function(docs) {
-          tests.ensureIndex({
-            a: 1
-          }, function(err, rep) {});
+        ], function(err, docs) {
+          console.log('done insert ...');
+          console.log(sys.inspect(docs));
+          console.log(sys.inspect(docs[0]._id.toHexString()));
+          tests.findById(docs[0]._id.toHexString(), function(err, doc) {
+            console.log('result of findById is ');
+            return console.dir(doc);
+          });
+          tests.ensureIndex([['a', 1]], function(err, rep) {});
           tests.count(function(err, count) {
             return sys.puts("There are " + count + " records.");
           });
