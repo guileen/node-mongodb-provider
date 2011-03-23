@@ -66,6 +66,7 @@ now
 >     collection(callback(err,collection))
 >     findItems(..., callback(err, itemsArray))
 >     findEach(..., callback(err, item))
+>     findById(_id, callback(err, item))
 
 ### example
 
