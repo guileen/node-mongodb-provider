@@ -30,9 +30,12 @@ class MongoProvider
       else
         cursor.each fn
 
-  findById: (id, fn) ->
-    @findOne {_id: @db.bson_serializer.ObjectID.createFromHexString(id)}, fn
+  findById: (args...) ->
+    @findOne {_id: @db.bson_serializer.ObjectID.createFromHexString(args[0])}, args[1..]...
 
+  sub: (sub) ->
+    @__defineGetter__ sub, ()-> 
+      @["sub-#{sub}"] or= new Provider "#{@collectionName}.#{sub}"
 ###
   bind these methods from Collection.prototype to Provider
 
