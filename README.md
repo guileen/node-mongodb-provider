@@ -9,6 +9,7 @@ Base on [node-mongodb-native](https://github.com/christkv/node-mongodb-native)
 ## Why MongoProvider
 
 before 
+>     db = new Db('blog', new Server('localhost', 27017))
 >     db.collection('users', function(error, collection){ 
 >      if(error)
 >        log(error) 
@@ -26,6 +27,7 @@ before
 >         })
 >      })
 now
+>     var db = provider.connect('db://localhost/blog')
 >     var userProvider = new MongoProvider(db, 'users')
 >     userProvider.findItems(function(error,items){ 
 >       if(error)
@@ -34,7 +36,18 @@ now
 >         handle(items)
 >     })
 
-## MongoProvider
+## provider.connect(path, options={}, callback)
+ * path url format  `*://[username:password@]host[:port]/database[?auto_reconnect=true|false]`
+ * options the options pass to new Db
+ * callback function(error, db)
+ * return db
+
+ e.g. 
+
+>     var db = provider.connect('db://localhost/blog')
+>     var db = provider.connect('mongodb://host:27017/blog?auto_reconnect=true', {native_parser: true})
+
+## provider.MongoProvider
 
 ### Bridge all the methods from Collection  
 
@@ -66,7 +79,7 @@ now
 >     collection(callback(err,collection))
 >     findItems(..., callback(err, itemsArray))
 >     findEach(..., callback(err, item))
->     findById(_id, callback(err, item))
+>     findById(_id, ..., callback(err, item))
 
 ### example
 
