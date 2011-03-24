@@ -1,14 +1,13 @@
 (function() {
-  var MongoProvider, db, host, mongo, port, sys, tests;
+  var db, host, port, provider, sys, tests;
   GLOBAL.DEBUG = true;
   sys = require("sys");
-  mongo = require('mongodb');
-  MongoProvider = require("../lib/provider").MongoProvider;
+  provider = require('../lib');
   host = process.env['MONGO_NODE_DRIVER_HOST'] || 'localhost';
-  port = process.env['MONGO_NODE_DRIVER_PORT'] || mongo.Connection.DEFAULT_PORT;
+  port = process.env['MONGO_NODE_DRIVER_PORT'] || 27017;
   sys.puts("Connecting to " + host + ":" + port);
-  db = new mongo.Db('node-mongo-examples', new mongo.Server(host, port, {}), {});
-  tests = new MongoProvider(db, "test");
+  db = provider.connect("mongodb://" + host + ":" + port + "/node-mongo-examples");
+  tests = new provider.MongoProvider(db, "test");
   db.open(function(err, db) {
     if (err) {
       sys.puts(err.stack);

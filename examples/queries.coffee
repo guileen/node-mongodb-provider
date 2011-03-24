@@ -3,15 +3,14 @@ GLOBAL.DEBUG = true
 sys = require("sys")
 #test = require("mjsunit")
 
-mongo = require('mongodb')
-{MongoProvider} = require("../lib/provider")
+provider = require('../lib')
 
 host = process.env['MONGO_NODE_DRIVER_HOST'] or 'localhost'
-port = process.env['MONGO_NODE_DRIVER_PORT'] or mongo.Connection.DEFAULT_PORT
+port = process.env['MONGO_NODE_DRIVER_PORT'] or 27017
 
 sys.puts("Connecting to " + host + ":" + port)
-db = new mongo.Db('node-mongo-examples', new mongo.Server(host, port, {}), {})
-tests = new MongoProvider db, "test"
+db = provider.connect "mongodb://#{host}:#{port}/node-mongo-examples"
+tests = new provider.MongoProvider db, "test"
 db.open (err, db) ->
   if err
     sys.puts(err.stack)
