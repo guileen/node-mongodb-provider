@@ -1,14 +1,11 @@
 { "name" :            "mongodb-provider"
 , "description" :     "A node.js provider class for MongoDB base on node-mongodb-native"
-, "version" :         "0.1.0"
+, "version" :         "0.1.1"
 , "author" :          "Jason Green <guileen@gmail.com>"
 , "repository" :    { "type" :  "git"
                     , "url" :   "git://github.com/guileen/node-mongo-provider.git"}
 , "bugs" :          { "mail" :  "guileen@gmail.com"
                     , "web" :   "http://github.com/guileen/node-mongo-provider/issues"}
-, "os" :            [ "linux"
-                    , "darwin"
-                    , "freebsd" ]
 , "main" :            "./lib/provider"
 , "directories" :   { "lib" : "./lib" 
                     , "examples" : "./examples" }
