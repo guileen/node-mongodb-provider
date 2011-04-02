@@ -8,12 +8,12 @@ Base on [node-mongodb-native](https://github.com/christkv/node-mongodb-native)
 
 ## Why MongoProvider
 
-before 
+before
 >     db = new Db('blog', new Server('localhost', 27017))
->     db.collection('users', function(error, collection){ 
+>     db.collection('users', function(error, collection){
 >      if(error)
->        log(error) 
->      else 
+>        log(error)
+>      else
 >        collection.find( function(error, cursor){
 >          if(error)
 >            log(error)
@@ -21,7 +21,7 @@ before
 >            cursor.toArray(function(error, items){
 >              if(error)
 >                log(error)
->              else 
+>              else
 >                handle(items)
 >            })
 >         })
@@ -29,7 +29,7 @@ before
 now
 >     var db = provider.connect('db://localhost/blog')
 >     var userProvider = new MongoProvider(db, 'users')
->     userProvider.findItems(function(error,items){ 
+>     userProvider.findItems(function(error,items){
 >       if(error)
 >         log(error)
 >       eles
@@ -42,14 +42,14 @@ now
  * callback function(error, db)
  * return db
 
- e.g. 
+ e.g.
 
 >     var db = provider.connect('db://localhost/blog')
 >     var db = provider.connect('mongodb://host:27017/blog?auto_reconnect=true', {native_parser: true})
 
 ## provider.MongoProvider
 
-### Bridge all the methods from Collection  
+### Bridge all the methods from Collection
 
 >     checkCollectionName
 >     count
@@ -74,7 +74,7 @@ now
 >     save
 >     update
 
-### additional methods  
+### additional methods
 
 >     collection(callback(err,collection))
 >     findItems(..., callback(err, itemsArray))
