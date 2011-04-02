@@ -83,8 +83,9 @@ now
 
 ### example
 
->     MongoProvider = require("mongodb-provider").MongoProvider;
->     var db = new Db("provider-example", new Server(host, port), {});
+>     provider = require("mongodb-provider");
+>     MongoProvider = provider.MongoProvider;
+>     var db = provider("db://"+ host +":"+ port +"/provider-example");
 >     var users = new MongoProvider(db, "users");
 >     users.insert([ { 'a': 1 }, { 'a': 2 }, { 'b': 3 } ], function(docs) {
 >       users.count(function(err, count) {
