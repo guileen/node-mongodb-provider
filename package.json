@@ -6,7 +6,7 @@
                     , "url" :   "git://github.com/guileen/node-mongo-provider.git"}
 , "bugs" :          { "mail" :  "guileen@gmail.com"
                     , "web" :   "http://github.com/guileen/node-mongo-provider/issues"}
-, "main" :            "./lib/provider"
+, "main" :            "./index.js"
 , "directories" :   { "lib" : "./lib" 
                     , "examples" : "./examples" }
 , "engines" :       { "node" : ">=0.4.0" }
@@ -14,4 +14,3 @@
 , "licenses" :    [ { "type" :  "Apache License, Version 2.0"
                     , "url" :   "http://www.apache.org/licenses/LICENSE-2.0" } ]
 }
-
