@@ -85,7 +85,7 @@ now
 
 >     provider = require("mongodb-provider");
 >     MongoProvider = provider.MongoProvider;
->     var db = provider("db://"+ host +":"+ port +"/provider-example");
+>     var db = provider.connect("db://"+ host +":"+ port +"/provider-example");
 >     var users = new MongoProvider(db, "users");
 >     users.insert([ { 'a': 1 }, { 'a': 2 }, { 'b': 3 } ], function(docs) {
 >       users.count(function(err, count) {
@@ -107,4 +107,4 @@ now
 >       users.findItems({}, { 'skip': 1, 'limit': 1, 'sort': 'a' }, function(err, docs) {
 >         return sys.puts("Returned #" + docs.length + " documents");
 >       });
->     }
+>     });
