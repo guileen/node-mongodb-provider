@@ -1,3 +1,8 @@
+# NOTE
+
+MongoProvider was continues with [**MongoSkin**](https://github.com/guileen/node-mongoskin).
+And MongoProvider will not update any more.
+
 # MongoProvider
 
 Base on [node-mongodb-native](https://github.com/christkv/node-mongodb-native)
